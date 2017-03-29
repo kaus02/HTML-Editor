@@ -1,0 +1,51 @@
+
+html
+{
+	border: 8px solid #000000;
+	
+}
+#tit
+{
+	margin-left: 500px;
+	margin-top: 10px;
+}
+#litit
+{
+	margin-left: 550px;
+	display: block;
+	font-size: 20px;
+}
+#but 
+{
+    margin-left: 210px;
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+
+}
+
+.doc 
+{
+	width:800px ;
+	height: 270px;
+	margin-top: 80px;
+	margin-left: 210px;
+	background-color: #ffff4d;
+    word-wrap: break-word;
+    overflow-y: scroll;
+}
+
+#li
+{
+	margin-left: 210px;
+	width:800px ;
+	height: 70px;
+	border: 2px solid #000000;
+	overflow-y: scroll;
+	color: red;
+}

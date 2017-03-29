@@ -1,0 +1,184 @@
+<html>
+    <head>
+        <link rel="stylesheet"  type="text/css" href="style.css">
+        <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+        <link href="ab/jquery.toolbar.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="ab/jquery.toolbar.js"></script>
+        <title> HTML editor </title>
+    </head>
+    <body  style="overflow: hidden; margin-top: 50px">
+        <h1 id="tit">HTML Editor</h1>
+        <div contenteditable="true" class="doc">Start writing.....</div>
+        <div id="toolbar-options" class="hidden">
+            <a href="#" onclick="formatDoc('bold');" ><i class="fa fa-bold" aria-hidden="true"></i></a>
+            <a href="#" onclick="formatDoc('underline');"><i class="fa fa-underline" aria-hidden="true"></i></a>
+            <a href="#" onclick="setColor();"><i class="fa fa-font" aria-hidden="true"></i></a>
+        </div>  
+        <button id="but">Done Editing</button>   
+        <div id="litit">Links(if any)</div>
+        <div id="li"></div>
+    <script>
+    var i=0,l,e,j=0,k;
+    var s1,s,x=0,a,n="",f=0;
+    
+    $('.doc').keydown(function(e) 
+    {
+    
+    if (e.keyCode === 13) 
+    {                                                               //when enter is pressed
+    
+      document.execCommand('insertHTML', false, '<br><br><br>');    //give a line space between two para's
+    
+        /*if(i===1)                                                          Code , if you want color changes to persist on
+            {                                                                changing paragraphs.
+                document.execCommand('forecolor',false,'#f00');             
+                
+                i=1;
+            }
+            else if(i===0)
+            {
+                document.execCommand('forecolor',false,'#000000');
+                
+                i=0;
+            }
+            */
+      return false;
+    }
+  });
+    function formatDoc(value)  //for bold and italic 
+    {
+            
+        document.execCommand(value,null,false);
+             
+    }
+    
+        function get_selection() // to get the text selected
+            {
+                var txt = '';
+                if (window.getSelection) 
+                {
+                    txt = window.getSelection();
+                } 
+                else if (document.getSelection) 
+                {
+                    txt = document.getSelection();
+                } 
+                else if (document.selection) 
+                {
+                    txt = document.selection.createRange().text;
+                }
+                return txt; 
+            }
+            $(document).dblclick(function() 
+            {
+              var span = document.createElement('span');
+              var sel = get_selection();                                        // get the selection
+              if (sel && sel.rangeCount) 
+              {
+                var range = sel.getRangeAt(0).cloneRange();
+                range.surroundContents(span);                                   //attaching span element
+                sel.removeAllRanges();
+                sel.addRange(range);
+            
+                $(span).toolbar({                 
+                  content: '#toolbar-options',
+                    position: 'top',
+                    hideOnClick: true
+                }).on('toolbarHidden', function (e) 
+                {                                                               //removing the span element 
+                  $(span).contents().unwrap('span');
+                });
+            }
+              
+            });
+
+            
+        
+        function load()
+        {
+            window.document.designMode="On";
+        }
+        function setColor()
+        {
+        
+            document.execCommand('forecolor',false,'#f00');
+            /*
+            if(i===0)                                                     This code can used ,if after changing the font color to Red 
+            {                                                             the color will persist in the following paragrphs and if you
+                document.execCommand('forecolor',false,'#f00');           want to revert back you can get back by clicking the same option,
+                                                                          otherwise the color changes to black as we change paragraphs.
+                                                                          And same method can be used for Bold and Underline as well,
+                i=1;                                                      which for now discontinue after changing paragrgaphs,as in
+            }                                                             Medium editor.
+            else if(i===1)
+            {
+                document.execCommand('forecolor',false,'#000000');
+                
+                i=0;
+            } 
+            */               
+                
+        }
+        $(document).ready(function() 
+        {
+        $('#but').on('click',function()
+        {
+            var myNode = document.getElementById("li");
+            while (myNode.firstChild) //removing all previous <a> tags appended 
+            {
+                myNode.removeChild(myNode.firstChild);
+            }
+            s= $('.doc').text();
+            l=s.length;
+            j=0;
+            for(x=0;x<l;x++)
+                  {
+
+                      s1="";
+                      f=0;
+                      if(s.substr(x,3)=="<a>")
+                      {
+                          for(y=x+3;y<l;y++)
+                          {
+                              if(s.substr(y,4)=="</a>")
+                              {
+                                  f=1;
+                                  break;
+                              }
+                              else
+                                s1+=s[y];  //s1 string containing the text between <a>..</a>
+                          }
+                      }
+                      if(f==1)
+                      {
+                          var mydiv = document.getElementById("li");
+                          var aTag = document.createElement('a');
+                          aTag.setAttribute('href',"#");
+                          
+                          
+                        
+                          mydiv.appendChild(aTag);
+                          linebreak = document.createElement("br");
+                          mydiv.appendChild(linebreak);
+                          if(j==0)
+                          {
+                            $(aTag).css({'color':'red'});
+                            j=1;
+                          }
+                          else if(j==1)
+                          {
+                            $(aTag).css({'color':'blue'})
+                            j=0;
+                          } 
+                          aTag.innerHTML = s1;
+                          $(aTag).text(s1);
+                          x=y+3;
+                      }
+                  }
+            });
+
+        });
+        </script>
+    </body>
+</html>
